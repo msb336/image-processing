@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/matt/repos/image-processing/stitch.cpp
+iostream
+-
+fstream
+-
+opencv2/highgui/highgui.hpp
+/home/matt/repos/image-processing/opencv2/highgui/highgui.hpp
+opencv2/stitching/stitcher.hpp
+/home/matt/repos/image-processing/opencv2/stitching/stitcher.hpp
+opencv2/core/core.hpp
+/home/matt/repos/image-processing/opencv2/core/core.hpp
+opencv2/opencv.hpp
+/home/matt/repos/image-processing/opencv2/opencv.hpp
+
