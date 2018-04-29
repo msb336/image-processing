@@ -1,3 +1,0 @@
-/home/matt/repos/image-processing/build/CMakeFiles/edit_cache.dir
-/home/matt/repos/image-processing/build/CMakeFiles/rebuild_cache.dir
-/home/matt/repos/image-processing/build/CMakeFiles/stitch.dir
