@@ -1,101 +1,23 @@
-#include <iostream>
-#include <fstream>
-
-#include "opencv2/opencv.hpp"
-#include <opencv2/xfeatures2d.hpp>
-
-using namespace std;
-using namespace cv;
-
-
-Mat crop( Mat img , int x1, int x2, int y1, int y2)
-{
-	Rect cropper = Rect(0,0,x2-x1, y2-y1);
-	Mat cropped = img(cropper);
-	return cropped ; 
-}
-
-vector<KeyPoint> detectFeatures ( Mat img )
-{
-	int minHessian = 400;
-	static Ptr<xfeatures2d::SURF> detector = xfeatures2d::SURF::create(minHessian);
-	vector<KeyPoint> keypoints;
-	detector->detect ( img, keypoints);
-
-
-	return keypoints;
-}
-
-void showKeyPoints ( vector<vector<KeyPoint> > keys, vector<Mat> imgs )
-{
-	for ( int i = 0; i < imgs.size(); i++ )
-	{
-		Mat img_keys ;
-		drawKeypoints( imgs[i], keys[i], img_keys ) ;
-		stringstream ss;
-		ss << i;
-		imshow ( ss.str(), img_keys );
-	}
-	waitKey(0);
-}
-
-bool statuscheck(Stitcher::Status stat)
-{
-		if ( stat != Stitcher::OK)
-	{
-		cout << "status issue: " <<  stat << endl;
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
+#include "includes.h"
 
 int main ( int argc, char** argv)
 {
+	stringstream paramfile ( argv[1] );
+	vector<string> params = readparameters ( paramfile.str() );
 
-	vector<Mat> imgs;
+	string filename = params[0];
+	string savefile = params[1];
+	int skip		= stoi ( params[2] );
+	int start		= stoi ( params[3] );
+	int max_images  = stoi ( params[4] );
+	vector<int> dimensions;
+	for ( int i = 5; i <=8; i++)
+	{
+		dimensions.push_back ( stoi ( params[i] ) );
+	}
+
+	vector<Mat> imgs = video2frames ( filename, dimensions, skip, max_images, start );
 	Stitcher stitcher = Stitcher::createDefault();
-	/*
-	for ( int i = 1; i < 15; i++ )
-	{
-		stringstream ss;
-		if ( i < 10 )
-		{
-			ss << "../brian-images/Hole_0" << i << ".jpg";
-		}
-		else
-		{
-			ss << "../brian-images/Hole_" << i << ".jpg";
-		}
-		
-		Mat img = imread(ss.str());
-		Mat cropped = crop(img,1, img.cols-1, 1, 965);
-		Mat reduced ;
-		resize (cropped, reduced, Size(), 0.5, 0.5) ;
-		imgs.push_back ( reduced );
-	}
-	*/
-
-	for ( int i = 0; i < 5; i++)
-	{
-		stringstream ss;
-		if (i < 5 )
-		{
-			ss << "../brian-images/Hole_2_" << i+2 << ".jpg";
-		}
-		else
-		{
-			ss << "../brian-images/Hole_9_" << i-3 << ".jpg";
-		}
-		cout << ss.str() << endl;
-		Mat img = imread(ss.str());
-		Mat cropped = crop(img,1, img.cols-1, 1, 965);
-		Mat reduced ;
-		resize (cropped, reduced, Size(), 0.5, 0.5) ;
-		imgs.push_back ( reduced );
-	}
 
 	Mat pano;
 
@@ -106,9 +28,10 @@ int main ( int argc, char** argv)
 		return -1;
 	else
 	{
-		imwrite("../stitched.jpg", pano);
+		imwrite(savefile, pano);
 		imshow("stitched", pano);
 		waitKey(0);
+		destroyAllWindows ();
 		return 0;
 	}
 

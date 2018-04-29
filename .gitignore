@@ -3,3 +3,10 @@
 *.cmake
 *.txt
 *.cmake
+*.cmake
+*.txt
+*.bin
+*.out
+*/build/*
+brian-images/*
+
