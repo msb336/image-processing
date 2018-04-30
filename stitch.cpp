@@ -15,6 +15,8 @@ int main ( int argc, char** argv)
 	{
 		dimensions.push_back ( stoi ( params[i] ) );
 	}
+	stringstream savestream;
+	savestream << savefile << "startframe" << start << "step" << skip << "max_images" << max_images << ".jpg";
 
 	vector<Mat> imgs = video2frames ( filename, dimensions, skip, max_images, start );
 	Stitcher stitcher = Stitcher::createDefault();
@@ -28,7 +30,7 @@ int main ( int argc, char** argv)
 		return -1;
 	else
 	{
-		imwrite(savefile, pano);
+		imwrite(savestream.str(), pano);
 		imshow("stitched", pano);
 		waitKey(0);
 		destroyAllWindows ();
