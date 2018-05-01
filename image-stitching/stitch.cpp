@@ -15,10 +15,11 @@ int main ( int argc, char** argv)
 	{
 		dimensions.push_back ( stoi ( params[i] ) );
 	}
+	bool showset	= stob ( params[9] );
 	stringstream savestream;
 	savestream << savefile << "startframe" << start << "step" << skip << "max_images" << max_images << ".jpg";
 
-	vector<Mat> imgs = video2frames ( filename, dimensions, skip, max_images, start );
+	vector<Mat> imgs = video2frames ( filename, dimensions, skip, max_images, start, showset );
 	Stitcher stitcher = Stitcher::createDefault();
 
 	Mat pano;

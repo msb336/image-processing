@@ -1,12 +1,6 @@
 
 .DS_Store
-*.cmake
-*.txt
-*.cmake
-*.cmake
-*.txt
-*.bin
-*.out
-*/build/*
-brian-images/*
+build
+brian-images
+*.mp4
 

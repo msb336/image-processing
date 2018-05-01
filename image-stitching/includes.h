@@ -39,7 +39,17 @@ vector<string> readparameters ( string filename )
     return parameters ;
 
 }
-
+bool stob ( std::string truefalse )
+{
+  if ( truefalse == "true" || truefalse == "1")
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 void crop( Mat &img , vector<int> dimensions )
 {
     bool nonzero = false;
@@ -61,7 +71,7 @@ void crop( Mat &img , vector<int> dimensions )
     }
 }
 
-vector < Mat > video2frames ( string filename, vector<int> dimensions, int skip_steps, int max_size=200 , int start = 0)
+vector < Mat > video2frames ( string filename, vector<int> dimensions, int skip_steps, int max_size=200 , int start = 0, bool showset = false)
 {
     vector < Mat > frameset;
     Mat single_frame;
@@ -76,9 +86,13 @@ vector < Mat > video2frames ( string filename, vector<int> dimensions, int skip_
             crop ( single_frame, dimensions );
             stringstream  s ( "frame" );
             s << i;
-            // imshow(s.str(), single_frame);
-		    // waitKey(0);
-            // destroyAllWindows ();
+            if ( showset )
+            {
+                imshow(s.str(), single_frame);
+                waitKey(0);
+                destroyAllWindows ();
+            }
+
             frameset.push_back ( single_frame );
         }
         
