@@ -1,4 +1,6 @@
 CMakeLists.txt
+*.jpg
+.vscode
 .DS_Store
 build
 brian-images
