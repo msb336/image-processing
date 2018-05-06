@@ -8,6 +8,25 @@
 using namespace std;
 using namespace cv;
 
+void get_images_from_dir (const string _filename, const string ext, vector<Mat> &image_set)
+{
+  vector < String > fn;
+  glob ( _filename + "/*" + ext, fn, false);
+  for ( size_t i = 0; i < fn.size(); i ++ )
+  {
+    image_set.push_back ( imread( fn[i] ) );
+  }
+}
+void get_filenames_from_dir ( const string _filename, const string ext, vector<string> &filenames )
+{
+      vector < String > fn;
+  glob ( _filename + "/*" + ext, fn, false);
+  for ( size_t i = 0; i < fn.size(); i ++ )
+  {
+    filenames.push_back ( fn[i] );
+  }
+}
+
 vector<string> readparameters ( string filename )
 {
     vector<string> parameters ;
@@ -71,21 +90,26 @@ void crop( Mat &img , vector<int> dimensions )
     }
 }
 
-vector < Mat > video2frames ( string filename, vector<int> dimensions, int skip_steps, int max_size=200 , int start = 0, bool showset = false)
+vector< vector<Mat> > video2frames ( string filename, vector<int> dimensions, int skip_steps, int max_size=200 , int start = 0, float resize_factor = 1, bool showset = false)
 {
     vector < Mat > frameset;
+    vector< vector < Mat > > full_image_stack;
     Mat single_frame;
+
     VideoCapture video ( filename );
+    cout << "video capture: " << filename << endl;
     video.set( 1, start );
+
     int i = 0;
-    while ( video.read ( single_frame )  && frameset.size() < max_size)
+    while ( video.read ( single_frame ) )
     {
         i++;
         if ( i % skip_steps == 0 )
         {
             crop ( single_frame, dimensions );
-            stringstream  s ( "frame" );
-            s << i;
+            resize ( single_frame, single_frame, Size(), resize_factor, resize_factor);
+            stringstream  s;
+            s << "frame " << i + start;
             if ( showset )
             {
                 imshow(s.str(), single_frame);
@@ -95,10 +119,17 @@ vector < Mat > video2frames ( string filename, vector<int> dimensions, int skip_
 
             frameset.push_back ( single_frame );
         }
+
+        if ( frameset.size() >= max_size )
+        {
+            
+            full_image_stack.push_back ( frameset );
+            frameset.clear ();
+        }
         
     }
-
-    return frameset;
+    cout << "full stack size: " << full_image_stack.size() <<endl;
+    return full_image_stack;
 }
 
 vector<KeyPoint> detectFeatures ( Mat img )
@@ -107,8 +138,6 @@ vector<KeyPoint> detectFeatures ( Mat img )
 	static Ptr<xfeatures2d::SURF> detector = xfeatures2d::SURF::create(minHessian);
 	vector<KeyPoint> keypoints;
 	detector->detect ( img, keypoints);
-
-
 	return keypoints;
 }
 
@@ -127,7 +156,8 @@ void showKeyPoints ( vector<vector<KeyPoint> > keys, vector<Mat> imgs )
 
 bool statuscheck(Stitcher::Status stat)
 {
-		if ( stat != Stitcher::OK)
+    
+	if ( stat != Stitcher::OK)
 	{
 		cout << "status issue: " <<  stat << endl;
 		return false;
@@ -136,4 +166,5 @@ bool statuscheck(Stitcher::Status stat)
 	{
 		return true;
 	}
+
 }

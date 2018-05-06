@@ -1,11 +1,14 @@
 Image stitching parameters
-File name: ../2018_04_21_11_30_58.mp4
-Save Location: ../teststitch
-skip step: 10
-start: 4000
-Max images: 25
-x lower bound: 300
-x upper bound: 700
-y lower bound: 200
-y upper bound: 500
+File name: ../../mlk-bridge-clips/deck_test/
+skip step: 5
+start: 700
+Max images: 70
+x lower bound: 0
+x upper bound: 0
+y lower bound: 0
+y upper bound: 0
+resize factor: 1
 Show Imageset: false
+Image Directory: true
+Video Directory: false
+stitching type: pano
