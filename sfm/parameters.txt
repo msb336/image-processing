@@ -1,0 +1,13 @@
+Image stitching parameters
+File name: ../../mlk-bridge-clips/underside_stitches/badvideos/underside_04_21_11_30_58
+skip step: 5
+start: 400
+Max images: 10
+x lower bound: 0
+x upper bound: 0
+y lower bound: 0
+y upper bound: 0
+resize factor: 1
+f: 1
+cx: 500
+cy: 500
